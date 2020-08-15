@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::get('/showAll', 'ProductController@showAll');
+    Route::post('/register', 'RegisterController@register')->name('register');
+    Route::post('/login', 'LoginController@login')->name('login');
+    
+    Route::get('/editedList', 'ProductController@showAllAdmin')->middleware('auth:api');
+    Route::post('/edit/{id}', 'ProductController@edit')->middleware('auth:api');
+    Route::post('/add', 'ProductController@add')->middleware('auth:api');
+    Route::delete('/delete/{id}', 'ProductController@delete')->middleware('auth:api');
+    Route::fallback(function () {
+        return response()->json(['error' => 'Not Found!'], 404);
+    });
+
