@@ -12,6 +12,7 @@ class RegisterController extends Controller
 {
     /*
     Register API
+    Name, email and password input. 
     */
     public function register(Request $request){
         $validator = Validator::make($request->all(), [

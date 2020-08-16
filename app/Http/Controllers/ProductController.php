@@ -10,16 +10,22 @@ use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
+    //public list 
     public function showAll(Request $request){
         $product = Product::all();
         if(count($product) == 0)   return ResponseController::sendError('Products not found.');
         else    return ResponseController::sendResponse($product, 'Products retrieved successfully.');
     }
+    //loged user list
     public function showAllAdmin(Request $request){
         $product = Product::all();
         if(count($product) == 0)   return ResponseController::sendError('Products not found.');
         else    return ResponseController::sendResponse($product, 'Products retrieved successfully.');
     }
+    /*
+    Request with edit product 
+    Input with product id, name, description, image, pricea, priceb, pricec
+    */
     public function edit($id, Request $request){
         $input = $request->all();
         $validator = Validator::make($input, [
@@ -35,7 +41,7 @@ class ProductController extends Controller
         }
         $product = Product::find($id);
         if(empty($product)){
-            return ResponseController::sendError('Note not found');
+            return ResponseController::sendError('Product not found');
         }
         else{
             $name = NULL;
@@ -56,6 +62,10 @@ class ProductController extends Controller
             return ResponseController::sendResponse(new ProductResource($product), 'Product updated successfully.');
         }
     }
+    /*
+    Add new prouct
+    input with name, description, image, pricea, priceb, pricec
+    */
     public function add(Request $request){
         $input = $request->all();
         $validator = Validator::make($input, [
@@ -87,8 +97,12 @@ class ProductController extends Controller
             $product->created_at = date("Y-m-d H:i:s", time());
             $product->save();
         }
-        return ResponseController::sendResponse(new ProductResource($product), 'Note created successfully.');
+        return ResponseController::sendResponse(new ProductResource($product), 'Product created successfully.');
     }
+    /*
+    Delete product
+    Input product id
+    */
     public function delete($id, Request $request){
         $product = Product::find($id);
         if(is_null($product)){
@@ -100,6 +114,7 @@ class ProductController extends Controller
             return ResponseController::sendResponse(null,'Product permanently deleted successfully.');
         }
     }
+    //Function for removing product image
     private static function removeImage($name){
         File::delete('images/'.$name);
     }

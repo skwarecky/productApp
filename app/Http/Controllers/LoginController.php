@@ -12,12 +12,13 @@ class LoginController extends Controller
 {
     /*
     Login API 
+    Email, and password input 
     */
 
     public function login(Request $request){
         if(Auth::attempt(['email' => $request->email, 'password'=> $request->password])){
             $user = Auth::user();
-            $success['token'] = $user->createToken('sdnotes')->accessToken;
+            $success['token'] = $user->createToken('productApp')->accessToken;
             $success['name'] = $user->name;
 
             return ResponseController::sendResponse($success, 'User login successfully');
